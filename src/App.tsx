@@ -4,6 +4,7 @@ import { UrlParams, useCharacter } from './components/customHooks';
 import { CardCharacter } from './components/cardCharacter';
 import { ButtonDiv } from './components/buttonDiv';
 import { LoaderCardContainer } from './components/loadingCard';
+import { SelectStatus } from './components/selectStatus';
 
 function App() {
   const [page, setPage] = useState<number>(1);
@@ -35,18 +36,12 @@ function App() {
 
   const data = useCharacter(urlParams, setLoading);
   const changeText = (event: any) => setTextInput(event.target.value);
-  const changeSelect = (event: any) => setStatus(event.target.value);
 
   return (
     <div className="App">
       <header className="App-header">
       <div className="d-flex flex-row align-items-center">
-        <select className="form-select mt-3 mx-2" style={{height: "50%", width: "80%"}} aria-label="Default select example" onChange={changeSelect}>
-          <option value="All">All status</option>
-          <option value="Alive">Alive</option>
-          <option value="Dead">Dead</option>
-          <option value="Unknown">Unknown</option>
-        </select>
+        <SelectStatus setStatus={setStatus} />
         <div className="input-group mt-3 mx-2">
           <input type="search" className="form-control rounded" placeholder="Search" value={textInput} onChange={changeText} />
           <button type="button" className="btn btn-outline-primary ms-2" onClick={() => setTextSearch(textInput)}>search</button>
