@@ -1,4 +1,5 @@
 
+import React from 'react';
 import "../css/card.css"
 
 export const LoadingCard = () => {
@@ -21,5 +22,5 @@ type LoaderCardContainerType = {
 
 export const LoaderCardContainer = (props: LoaderCardContainerType) => {
     const { count } = props;
-    return( <>{Array.from({length: count}, () => <LoadingCard />)}</>);
+    return( <>{React.Children.toArray(Array.from({length: count}, () => <LoadingCard />))}</>);
 }

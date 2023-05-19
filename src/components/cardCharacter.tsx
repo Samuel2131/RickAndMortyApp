@@ -1,17 +1,15 @@
-
-type Character = {
-    name: string,
-    gender: string,
-    status: boolean,
-    img: string,
-    species: string
-}
+import { Character } from "../models/character";
+import {useNavigate} from "react-router-dom"
 
 export const CardCharacter = (props: Character) => {
-    const {name, gender, status, img, species} = props;
+    const navigate = useNavigate();
+    const {id, name, gender, status, image, species} = props;
+
+    const clickCard = () => navigate("/"+id);
+
     return(
-        <div className="card m-3 p-3" style={{width: "18rem"}}>
-            <img src={img} className="card-img-top" alt="..." />
+        <div className="card m-3 p-3" style={{width: "18rem"}} onClick={() => clickCard()}>
+            <img src={image} className="card-img-top" alt="..." />
             <div className="card-body">
                 <p className="card-text text-white bg-dark">{name}</p>
                 <p className="card-text text-white bg-dark">{gender}</p>
