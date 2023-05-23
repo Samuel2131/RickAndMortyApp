@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import '../App.css';
 import { UrlParams, useCharacter } from './customHooks';
 import { CardCharacter } from './cardCharacter';
@@ -7,14 +7,16 @@ import { ButtonDiv } from './buttonDiv';
 import { LoaderCardContainer } from './loadingCard';
 import { SelectStatus } from './selectStatus';
 import { useSearchParams, useNavigate } from "react-router-dom";
+import { CommonContext } from '../App';
 
 
 export const CharacterList = () => {
+  const theme = useContext(CommonContext);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [page, setPage] = useState<number>(Number(searchParams.get("page")) || 1);
   const [isLoading, setLoading] = useState<boolean>(true);
-  const [textInput, setTextInput] = useState<string>("");
+  const [textInput, setTextInput] = useState<string>(searchParams.get("name") || "");
   const [textSearch, setTextSearch] = useState<string>("");
   const [status, setStatus] = useState<"All" | "Alive" | "Dead" | "Unknown">("All");
 
@@ -29,7 +31,7 @@ export const CharacterList = () => {
     else alert("there are no other pages...");
   }
   const prevPage = () => {
-    if(page > 1) navigate("/home?page="+(page-1));
+    if(page > 1) navigate(-1);
     else alert("there are no other pages...");
   }
 
@@ -37,10 +39,18 @@ export const CharacterList = () => {
   const changeText = (event: any) => setTextInput(event.target.value);
 
   useEffect(() => {
-    setPage(Number(searchParams.get("page")));
-    setLoading(true);
+    if(page) {
+      setPage(Number(searchParams.get("page")));
+      setLoading(true);
+      console.log(theme);
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams.get("page")]);
+
+  useEffect(() => {
+    setTextSearch(searchParams.get("name") || "");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams.get("name")])
 
   return (
     <div className="App">
@@ -49,7 +59,7 @@ export const CharacterList = () => {
         <SelectStatus setStatus={setStatus} />
         <div className="input-group mt-3 mx-2">
           <input type="search" className="form-control rounded" placeholder="Search" value={textInput} onChange={changeText} />
-          <button type="button" className="btn btn-outline-primary ms-2" onClick={() => setTextSearch(textInput)}>search</button>
+          <button type="button" className="btn btn-outline-primary ms-2" onClick={() => navigate(`/home?page=${page}&name=${textInput}`)}>search</button>
         </div>
       </div>
       <h2 className='fs-1 fw-bolder'>Page number {page}</h2>
